@@ -1,0 +1,4 @@
+Create branching tournament place holders GUI
+Allow for templatized names on the place holders
+Create "backend" logic for storing participants and their attributes
+Create GUI to enter participants and their attributes
