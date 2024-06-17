@@ -7,7 +7,7 @@ const ={
     "rHeight": 700 # Height of the root window
 }
 
-def Setup(root: Tk):
+def App(root: Tk):
     # Setting up title and dimensions of the window
     root.title("Tourney Manager")
     root.geometry(f"{const['rWidth']}x{const['rHeight']}")
@@ -17,7 +17,7 @@ def Setup(root: Tk):
     parent_frm.pack(expand=True, fill=BOTH)
     
     # Create a canvas inside the parent and make it expandable while filling the entire parent
-    cnvs = Canvas(parent_frm)
+    cnvs = Canvas(parent_frm, bg="#000000")
     cnvs.pack(side=LEFT, expand=True, fill=BOTH)
 
     # Create a scrollbar for the canvas
@@ -25,10 +25,9 @@ def Setup(root: Tk):
     cnvs.config(yscrollcommand=scrollbar.set)
     scrollbar.pack(side=RIGHT, fill=Y)
 
-    bracket_cnvs = Canvas(cnvs, width=400, height=400)
+    bracket_cnvs = Canvas(cnvs, width=400, height=400, bg="#2255DD")
     bracket_cnvs_id = cnvs.create_window(0, 0, window=bracket_cnvs)
     parent_frm.bind("<Configure>", lambda event: center_canvas(event, cnvs, bracket_cnvs_id, .5, .4))
-    # ttk.Label(bracket_cnvs, text="Test").grid()
 
     # Create a frame inside the canvas
     frm = ttk.Frame(cnvs, padding=10)
@@ -65,8 +64,17 @@ def Setup(root: Tk):
 
 # Function to create a bracket
 def create_bracket(cnvs: Canvas, num_competitors: int):
+    # Delete all existing lines
+    cnvs.delete("all")
+
+    cnvs_height = int(cnvs.cget('height'))
+
+    line_height = cnvs_height / num_competitors
+
+    # Create new lines
     for each in range(num_competitors):
-        cnvs.create_line(150, 150 + each * 50, 250, 150 + each * 50, width=10)
+        y = (each + 0.5) * line_height
+        cnvs.create_line(150, y, 250, y, width=10)
 
 # Center the frame in the canvas
 def center_canvas(event, cnvs, window_id, relative_x, relative_y):
@@ -77,5 +85,5 @@ def center_canvas(event, cnvs, window_id, relative_x, relative_y):
 # Main function
 if __name__ == "__main__":
     root = Tk()
-    Setup(root)
+    App(root)
     root.mainloop()
